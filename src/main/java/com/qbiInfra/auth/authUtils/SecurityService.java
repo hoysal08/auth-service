@@ -45,7 +45,7 @@ public class SecurityService {
 
     public String getBearerToken(HttpServletRequest request) {
         String bearerToken = null;
-        String authorization = request.getHeader("Authorization");
+        String authorization = request.getHeader("authorization");
         if (StringUtils.hasText(authorization) && authorization.startsWith("Bearer ")) {
             bearerToken = authorization.substring(7);
         }

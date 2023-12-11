@@ -42,11 +42,18 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        verifyToken(request);
+
+        if (isPublicApi(request)) {
+            System.out.println("I am public api");
+            filterChain.doFilter(request, response);
+            return;
+        }
+        System.out.println("calling firebase");
+        verifyToken(request, response);
         filterChain.doFilter(request, response);
     }
 
-    private void verifyToken(HttpServletRequest request) {
+    private void verifyToken(HttpServletRequest request, HttpServletResponse response) {
         String session = null;
         FirebaseToken decodedToken = null;
         Credentials.CredentialType type = null;
@@ -72,6 +79,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
         User user = firebaseTokenToUserDto(decodedToken);
         if (user != null) {
+            String jwtToken = JwtUtils.generateToken(user);
+            response.addHeader("Authorization", "Bearer " + jwtToken);
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user,
                     new Credentials(type, decodedToken, token, session), null);
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -91,6 +100,13 @@ public class SecurityFilter extends OncePerRequestFilter {
             user.setEmailVerified(decodedToken.isEmailVerified());
         }
         return user;
+    }
+
+    private boolean isPublicApi(HttpServletRequest request) {
+        if (request.getRequestURI().equals("/public/getUser") || request.getRequestURI().equals("/public/validate")) {
+            return true;
+        }
+        return false;
     }
 }
 
