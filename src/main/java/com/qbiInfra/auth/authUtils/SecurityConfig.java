@@ -21,6 +21,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import com.qbiInfra.auth.authUtils.CustomAuthenticationSuccessHandler;
 
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,10 +62,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(restSecProps.getAllowedOrigins());
+//        configuration.setAllowedOrigins(restSecProps.getAllowedOrigins());
+        configuration.setAllowedOrigins(Arrays.asList("*"));
         configuration.setAllowedMethods(restSecProps.getAllowedMethods());
         configuration.setAllowedHeaders(restSecProps.getAllowedHeaders());
-        configuration.setAllowCredentials(restSecProps.isAllowCredentials());
+//        configuration.setAllowCredentials(restSecProps.isAllowCredentials());
         configuration.setExposedHeaders(restSecProps.getExposedHeaders());
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);

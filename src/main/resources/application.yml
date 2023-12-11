@@ -41,6 +41,7 @@ security:
   allowed-origins:
     - https://${DOMAIN}
     - http://localhost:3000
+    - http://10.20.3.164:8765/user-details
   allowed-methods:
     - GET
     - POST
