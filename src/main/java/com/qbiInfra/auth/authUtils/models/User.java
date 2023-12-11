@@ -2,11 +2,8 @@ package com.qbiInfra.auth.authUtils.models;
 
 import lombok.Data;
 
-import java.io.Serializable;
-
 @Data
-public class User implements Serializable {
-    private static final long serialVersionUID = 4408418647685225829L;
+public class User  {
     private String uid;
     private String name;
     private String email;
